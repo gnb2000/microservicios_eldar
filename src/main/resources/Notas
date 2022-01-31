@@ -1,0 +1,25 @@
+En el ejemplo mencionado el framework de Spring no puede determinar a que tipo de vehículo, mas abstractamente hablando clase, te estas refiriendo, por lo que es necesario un @Qualifier.
+
+@Component
+@Qualifier("carroBean")
+public class Carro Implements Vehiculo {
+   @Override
+   public void encender() {
+      System.out.println("Carro ha encendido");
+   }
+ }
+@Component
+@Qualifier("barcoBean")
+public class Barco Implements Vehiculo {
+   @Override
+   public void encender() {
+      System.out.println("Barco ha encendido");
+   }
+}
+@Service
+public class VehiculoService  {
+   @Autowired
+   @Qualifier("carroBean")
+   private Vehiculo vehiculo;
+}
+Dado que agregamos @Qualifier, a cada una de las subclases y en cuando efectuamos el autowire, y definimos con el  @Qualifier cual es el componente que queremos referir.
