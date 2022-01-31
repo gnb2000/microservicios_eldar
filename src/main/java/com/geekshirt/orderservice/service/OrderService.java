@@ -1,20 +1,42 @@
 package com.geekshirt.orderservice.service;
 
+import com.geekshirt.orderservice.client.CustomerServiceClient;
+import com.geekshirt.orderservice.dto.AccountDto;
 import com.geekshirt.orderservice.dto.OrderRequest;
 import com.geekshirt.orderservice.dto.OrderResponse;
 import com.geekshirt.orderservice.entities.Order;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Slf4j
 @Service
 public class OrderService {
 
+    @Autowired
+    private CustomerServiceClient customerServiceClient;
+
     public Order createOrder(OrderRequest orderRequest){
+
+        AccountDto accountDto = customerServiceClient.findAccountById(orderRequest.getAccountId());
+
+        AccountDto dummyAccount = customerServiceClient.createDummyAccount();
+        //dummyAccount = customerServiceClient.createAccount(dummyAccount);
+        dummyAccount = customerServiceClient.createAccountBody(dummyAccount);
+
+        dummyAccount.getAddress().setZipCode("999");
+        customerServiceClient.updateAccount(dummyAccount);
+
+        //System.out.println(customerServiceClient.findAccountById(orderRequest.getAccountId()));
+
+        customerServiceClient.deleteAccount(dummyAccount);
+
         Order response = new Order();
-        response.setAccountId(orderRequest.getAccountId());
+        response.setAccountId("1");
         response.setOrderId("9999");
         response.setStatus("PENDING");
         response.setTotalAmount(100.000);

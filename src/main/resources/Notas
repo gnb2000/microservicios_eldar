@@ -23,3 +23,7 @@ public class VehiculoService  {
    private Vehiculo vehiculo;
 }
 Dado que agregamos @Qualifier, a cada una de las subclases y en cuando efectuamos el autowire, y definimos con el  @Qualifier cual es el componente que queremos referir.
+
+
+----------------------------
+Alternativa a Rest Template: FEIGN
