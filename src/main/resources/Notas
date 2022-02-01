@@ -27,3 +27,7 @@ Dado que agregamos @Qualifier, a cada una de las subclases y en cuando efectuamo
 
 ----------------------------
 Alternativa a Rest Template: FEIGN
+
+
+---------------------------------
+En las entidades @Transient no persiste ese atributo en la DB
