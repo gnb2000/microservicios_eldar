@@ -9,9 +9,13 @@ import com.geekshirt.orderservice.util.AccountStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -26,8 +30,18 @@ public class CustomerServiceClient {
         restTemplate = builder.build();
     }
 
-    public AccountDto findAccountById(String accountId){
-        return restTemplate.getForObject(config.getCustomerServiceUrl() + "/{id}",AccountDto.class,accountId);
+    public Optional<AccountDto> findAccountById(String accountId){
+        Optional<AccountDto> result = Optional.empty();
+
+        try{
+            result = Optional.ofNullable(restTemplate.getForObject(config.getCustomerServiceUrl() + "/{id}",AccountDto.class,accountId));
+        } catch (HttpClientErrorException ex){
+            if (ex.getStatusCode() != HttpStatus.NOT_FOUND){
+                throw ex;
+            }
+        }
+
+        return result;
     }
 
     public AccountDto createDummyAccount(){
