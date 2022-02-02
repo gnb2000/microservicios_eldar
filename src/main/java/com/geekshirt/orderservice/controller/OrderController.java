@@ -3,6 +3,7 @@ package com.geekshirt.orderservice.controller;
 import com.geekshirt.orderservice.dto.OrderRequest;
 import com.geekshirt.orderservice.dto.OrderResponse;
 import com.geekshirt.orderservice.entities.Order;
+import com.geekshirt.orderservice.exception.PaymentNotAcceptedException;
 import com.geekshirt.orderservice.service.OrderService;
 import com.geekshirt.orderservice.util.EntityDtoConverter;
 import io.swagger.annotations.Api;
@@ -34,7 +35,7 @@ public class OrderController {
         return new ResponseEntity<>(entityDtoConverter.convertEntityToDto(orders), HttpStatus.OK);
     }
 
-    @ApiOperation(value="Retrieve an order based on ID", notes = "This operation returns an order by ID")
+    @ApiOperation(value="Retrieve an order based on Order ID", notes = "This operation returns an order by Order ID")
     @GetMapping("/order/{orderId}")
     public ResponseEntity<OrderResponse> findById(@PathVariable String orderId){
         Order o = orderService.findById(orderId);
@@ -43,7 +44,7 @@ public class OrderController {
 
     @ApiOperation(value="Creates an order", notes = "This operation creates a new order")
     @PostMapping("/order/create")
-    public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest payload){
+    public ResponseEntity<OrderResponse> createOrder(@RequestBody OrderRequest payload) throws PaymentNotAcceptedException {
         Order o = orderService.createOrder(payload);
         return new ResponseEntity<>(entityDtoConverter.convertEntityToDto(o),HttpStatus.CREATED);
     }
@@ -54,6 +55,17 @@ public class OrderController {
         Order o = orderService.findById(id);
         return new ResponseEntity<>(entityDtoConverter.convertEntityToDto(o),HttpStatus.OK);
     }
+
+    @ApiOperation(value="Retrieve an order based on Account Id", notes = "This operation returns an order by Account ID")
+    @GetMapping("/order/account/{accountId}")
+    public ResponseEntity<List<OrderResponse>> findByAccountId(@PathVariable String accountId){
+        List<Order> orders = orderService.findOrdersByAccountId(accountId);
+        return new ResponseEntity<>(entityDtoConverter.convertEntityToDto(orders),HttpStatus.OK);
+    }
+
+
+
+
 
 
 }
