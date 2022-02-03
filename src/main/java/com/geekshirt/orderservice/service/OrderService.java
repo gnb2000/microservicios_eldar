@@ -47,6 +47,9 @@ public class OrderService {
     @Autowired
     private ShippingOrderProducer shippingOrderProducer;
 
+    @Autowired
+    private OrderMailService mailService;
+
     @Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRED)
     public Order createOrder(OrderRequest orderRequest) throws PaymentNotAcceptedException {
 
@@ -129,6 +132,8 @@ public class OrderService {
             Order order = this.findById(response.getOrderId());
             order.setStatus(OrderStatus.valueOf(response.getShippingStatus()));
             orderRepository.save(order);
+
+            mailService.sendEmail(order,response);
         }
 
         catch (OrderNotFoundException e){
@@ -137,7 +142,7 @@ public class OrderService {
         }
 
         catch (Exception e) {
-            log.info("An error occurred");
+            log.info("An error occurred sending email " + e.getMessage());
         }
 
     }
