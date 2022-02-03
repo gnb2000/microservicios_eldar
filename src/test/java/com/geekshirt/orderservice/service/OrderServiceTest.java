@@ -15,6 +15,7 @@ import com.geekshirt.orderservice.util.OrderPaymentStatus;
 import com.geekshirt.orderservice.util.OrderServiceDataTestUtils;
 import com.geekshirt.orderservice.util.OrderStatus;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,6 +49,12 @@ public class OrderServiceTest {
 
     @Mock
     private ShippingOrderProducer shipmentMessageProducer;
+
+    @BeforeEach
+    public void init() {
+        AccountDto mockAccount = OrderServiceDataTestUtils.getMockAccount("12345678");
+        Mockito.doReturn(Optional.of(mockAccount)).when(customerClient).findAccountById(anyString());
+    }
 
     @DisplayName("Should throw incorrect exception when order items are null")
     @Test
