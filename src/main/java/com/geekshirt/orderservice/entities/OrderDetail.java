@@ -30,6 +30,9 @@ public class OrderDetail extends CommonEntity{
     @Column(name = "UPC")
     private String upc;
 
+    @Column(name = "TOTAL_AMOUNT")
+    private Double totalAmount;
+
     @ManyToOne(cascade = CascadeType.ALL)
     private Order order;
 
